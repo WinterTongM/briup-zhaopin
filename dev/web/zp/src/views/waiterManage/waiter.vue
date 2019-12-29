@@ -2,8 +2,8 @@
  * @Author: liuyr 
  * 客服列表页面
  * @Date: 2019-12-23 17:11:53 
- * @Last Modified by: YangHt
- * @Last Modified time: 2019-12-28 11:04:39
+ * @Last Modified by: wenxt
+ * @Last Modified time: 2019-12-29 15:30:57
  */
 <template>
   <div class="waiterList">
@@ -292,7 +292,7 @@ import {deleteCustomerServiceById,
         findBusinesByGender,
         saveOrUpdateCustomerService,
         findCustomerServiceById}  from "@/api/service.js"
-import {findAllEmpJobWithJobhAndEmpl} from '@/api/jab.js'        
+import {findAllEmploymentJobhunterWithJobhAndEmpl} from '@/api/employmentJobhunter.js'        
 import config from '@/utils/config.js'
 export default {
   data() {
@@ -389,7 +389,7 @@ export default {
 
 
   async  toEdit(row){
-     let res = await findAllEmpJobWithJobhAndEmpl();
+     let res = await findAllEmploymentJobhunterWithJobhAndEmpl();
       this.findAllEmpJobData =res.data;
      this.scopeVisible=true;
    },

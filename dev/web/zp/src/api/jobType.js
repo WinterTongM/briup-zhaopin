@@ -2,7 +2,7 @@
  * @Author: wenxt 
  * @Date: 2019-12-29 08:55:54 
  * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 09:04:12
+ * @Last Modified time: 2019-12-29 09:35:34
  */
 import axios from '@/utils/axios'
 
@@ -15,7 +15,7 @@ export function findAllJobType(){
     return axios.get('/JobType/findAll');
 }
 
-export function findJboTypeById(param){
+export function findJobTypeById(param){
     return axios.get('/JobType/findById',{params:param});
 }
 

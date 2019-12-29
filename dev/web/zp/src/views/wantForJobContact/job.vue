@@ -2,7 +2,7 @@
  * @Author: Wuwangzai 
  * @Date: 2019-12-28 15:12:59 
  * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 10:14:12
+ * @Last Modified time: 2019-12-29 15:30:55
  */
 
 <template>
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-  import {findAllEmploymentJobhunterWithJobhAndEmpl  }  from "@/api/employmentJobhunter.js"
+  import {findAllEmploymentJobhunterWithJobhAndEmpl}  from "@/api/employmentJobhunter.js"
 export default {
   data() {
     return {

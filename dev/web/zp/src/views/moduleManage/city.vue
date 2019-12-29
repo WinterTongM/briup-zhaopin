@@ -73,7 +73,7 @@ export default {
       //当前页码
       currentPage:1,
       //每页条数
-      pageSize:5,
+      pageSize:6,
       reminder:'Please wait a moment',
       waiting:true,
     };

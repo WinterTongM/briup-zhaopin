@@ -1,19 +1,29 @@
 /*
  * @Author: Wuwangzai 
  * @Date: 2019-12-28 15:12:59 
- * @Last Modified by: wangzai
- * @Last Modified time: 2019-12-29 17:16:44
+ * @Last Modified by: wenxt
+ * @Last Modified time: 2019-12-30 01:01:49
  */
 
 <template>
-
   <div id="jobList"> 
- 
-
+    <!-- {{findAllEmploymentJobhunterWithJobhAndEmplData}} -->
+    <div class="topDiv">
+      <div class="searchDiv">
+      <el-select @change="employmentChange" size="mini" v-model="employment" clearable placeholder="全部" style="width:131px;">
+        <el-option
+          v-for="item in employmentName"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+    </div>
     <div id="button1" style='margin-bottom:10px'>
       <el-button size="mini" type="primary">待联系</el-button>
-      
     </div> 
+    </div>
+    
 
    <el-table
     :data="CustomerServiceList"
@@ -45,7 +55,6 @@
       <template slot-scope="scope">
         <!-- 弹出框的启动按钮 -->
         <el-button @click="toSee(scope.row)" type="text" size="small">查看</el-button>  
-      
       </template>
 
     </el-table-column>
@@ -137,15 +146,19 @@ export default {
     return {
       EmploymentJobhunter:'',
       findAllEmploymentJobhunterWithJobhAndEmplData:[],
+      emplData:[],
       EmploymentJobhunterusername:[],
       // 弹出框的触发变量，默认为false
       dialogTableVisible:false,
       currentjob:{},
       currentPage:1,
+      employment:'',
+      employmentName:[],
       
     };
   },
   computed: {  
+    
     CustomerServiceList(){
       let temp=[...this.findAllEmploymentJobhunterWithJobhAndEmplData];
       let pageSize = 10;
@@ -155,6 +168,18 @@ export default {
       
       },
   methods: {
+    employmentChange(val){
+      // console.log(val);
+      this.currentPage = 1;
+      if(val){
+        let result = this.emplData.filter(item=>{
+          return item.employment.job === val;
+        });
+        this.findAllEmploymentJobhunterWithJobhAndEmplData = result;
+      }else{
+        this.findAllJob();
+      }
+    },
     CurrentChange1(val){
       this.currentPage=val;
 
@@ -166,12 +191,15 @@ export default {
       })
     },
   async  findAllJob(){
-        let res =await findAllEmploymentJobhunterWithJobhAndEmpl();
+        let res =await findAllEmploymentJobhunterWithJobhAndEmpl();   
+        this.emplData = res.data;  
         this.findAllEmploymentJobhunterWithJobhAndEmplData=res.data;
         this.timeData();
-        
-
-
+        let jobNameArr = res.data.map(item=>{
+          // console.log(item.employment.job);
+          return item.employment.job;
+        })
+        this.employmentName = [... new Set(jobNameArr)];
     },
 
     toSee(row){
@@ -187,6 +215,18 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+.topDiv{
+  div{
+    display: inline-block;
+  }
+  #button1{
+      float: right;
+      // margin-left: 100px;
+    }
+  
+}
+
+
 #jobList{
   width: 100%;
 }

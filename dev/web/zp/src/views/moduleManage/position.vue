@@ -23,7 +23,7 @@
           <el-button type="text" @click="addjob(item)">添加</el-button>
         </div>
         <div class="jobDataList inputDiv" v-else>
-          <input v-model="jobName" type="text" >
+          <input v-model="jobName" placeholder="请输入职位名称"  type="text" >
           <button @click="jobDataAdd(item)">添加</button>
         </div>
       </el-card>
@@ -65,12 +65,12 @@ export default {
       //职位类型数据
       JobTypeData:[],
       JobData:[],
-      jobName:'请输入职位名称',
+      jobName:'',
       jobTypeName:'',
       //当前页码
       currentPage:1,
       //每页条数
-      pageSize:config.pageSize,
+      pageSize:6,
       addJobVisible:false,
       reminder:'Please wait a moment',
       waiting:true,
@@ -80,7 +80,7 @@ export default {
     jobTypeList(){
       let temp = [...this.JobTypeData];
       let page = this.currentPage;
-      let pageSize = config.pageSize;
+      let pageSize = this.pageSize;
       return temp.slice(pageSize*(page-1),pageSize*page);
     }
   },

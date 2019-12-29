@@ -410,12 +410,6 @@ export default {
        this.CustomerServiceData=Arr;
 
        
-        this.$notify({
-          title: '成功',
-          message: '这是一条成功的提示消息',
-          type: 'success'
-         
-        }); 
      
       }catch(err){
         config.errorMsg(this,"通过状态查找商家信息错误")
@@ -460,12 +454,7 @@ export default {
 
 
        this.CustomerServiceData=Arr;
-            this.$notify({
-                title: '成功',
-                message: '这是一条成功的提示消息',
-                type: 'success'
-         
-                }); 
+            
         }catch(err){
              config.errorMsg(this,"通过状态查找商家信息错误")
         }
@@ -484,7 +473,10 @@ export default {
     
     },
     seleteChang(val){
+          this.status='',
+          this.gender='',
           this.input='';  
+          this.findAllSer();
           if(val===''){
               this.findAllSer();
           }
@@ -567,13 +559,13 @@ async seach(){
            await deleteCustomerServiceById({id});
             this.$notify({
           title: '成功',
-          message: '这是一条成功的提示消息',
+          message: '删除成功',
           type: 'success'
          
         }); 
         this.findAllSer();
         }catch(err){
-           config.errorMsg(this,'查找错误');
+           config.errorMsg(this,'删除失败');
         }
      },
     //  分页功能

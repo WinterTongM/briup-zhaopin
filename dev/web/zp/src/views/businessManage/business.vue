@@ -114,17 +114,18 @@
       </el-col>
 
       <el-col :span="11">
-      <el-form-item label="所在城市" prop="province" >
+      <el-form-item label="所在城市" prop="province" required>
       <el-col :span="11">
-      <el-select v-model="business.province" @change="proChange" placeholder="省份">
+        <el-form-item prop="province">
+      <el-select v-model="business.province" @change="proChange" placeholder="省份" clearable>
           <el-option v-for="item in provinceData" :key='item.id' :label="item.name" :value='item.id'></el-option>
           
-      </el-select></el-col>
+      </el-select></el-form-item></el-col>
       <el-col class="line" :span="2">--</el-col>
-      <el-col :span="11">
-      <el-select v-model="business.city" placeholder="城市">
+      <el-col :span="11"><el-form-item prop="city">
+      <el-select v-model="business.city" placeholder="城市" clearable>
           <el-option v-for="item in findCityData" :key='item.id' :label="item.name" :value='item.name'></el-option>
-      </el-select></el-col>
+      </el-select></el-form-item></el-col>
       </el-form-item>
       </el-col>
     </el-row>
@@ -239,8 +240,8 @@ export default {
           name: [{ required: true, message: '请输入新的公司名称', trigger: 'blur' },],
           industry: [{ required: true, message: '请输入行业', trigger: 'blur' }],
           scale: [ { required: true, message: '请选择规模', trigger: 'change' }],
-          Province: [ { required: true, message: '请选择规模', trigger: 'change' }],
-          
+          province: [ { required: true, message: '请选择省份', trigger: 'change' }],
+          city: [ { required: true, message: '请选择城市', trigger: 'change' }],
           contactName: [{ required: true, message: '请输入联系人名称', trigger: 'blur' }],
           contactPhone: [{ required: true, message: '请输入联系方式', trigger: 'blur' }],
           registeredCapital: [{ required: true, message: '请输入注册资金', trigger: 'blur' }],
@@ -314,19 +315,13 @@ export default {
 //完成修改按钮
   async toSave(formName) {
     this.$refs[formName].validate(async valid => {
-        if (valid) {
-          //通过验证
-         //将省份id处理为省份名字再保存
-      let province = this.business.province;
-      // console.log(province);
-      // console.log(typeof province);
-      // console.log(+province);
-      // 如果省份发生更改
-      if(+province){
-        // 将省份id处理为省份名字再保存,过滤省份数组，不调用后台接口了
+        if (valid) {  //通过验证         
+         //将省份id处理为省份名字再保存,过滤省份数组
+      let province = this.business.province;     
+      if(+province){  // 如果省份发生更改
         let result = this.provinceData.filter((item)=>{         
-          return item.id === +province;
-        })[0];//这里返回的是一个数组，而且只有一个，所以这里要用中括号0获取这个省份对象
+          return item.id === +province;})[0];
+        //filter、map返回的是一个数组
         // result是省份对象，result.name就是省份名
         this.business.province = result.name;        
       }

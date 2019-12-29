@@ -2,110 +2,90 @@
  * @Author: liuyr 
  * 客服列表页面
  * @Date: 2019-12-23 17:11:53 
- * @Last Modified by: YangHt
- * @Last Modified time: 2019-12-28 11:04:39
+ * @Last Modified by: wangzai
+ * @Last Modified time: 2019-12-29 17:01:19
  */
 <template>
+
   <div class="waiterList">
-  
+    
+    
     <!-- 添加客服按钮功能 -->
     <div class="button1">
       <el-button  @click="toAdd" type="danger" size="mini">添加客服</el-button>
       <el-dialog title="添加客服" :visible.sync="dialogFormVisible">
-        <el-form :model="CustomerService">
+        <el-form :model="CustomerService" :rules="rules">
           
-          <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-form-item label="用户名" prop="username" :label-width="formLabelWidth">
             <el-input v-model="CustomerService.username" autocomplete="off"></el-input>
           </el-form-item>
-           <el-form-item label="姓名" :label-width="formLabelWidth">
+
+          <el-form-item label="姓名" prop="realname"  :label-width="formLabelWidth">
             <el-input v-model="CustomerService.realname" autocomplete="off"></el-input>
           </el-form-item>
-            <el-form-item label="状态" :label-width="formLabelWidth">
+
+          <el-form-item label="状态"  prop="status" :label-width="formLabelWidth">
             <el-input v-model="CustomerService.status" autocomplete="off"></el-input>
           </el-form-item>
 
-
-          <el-form-item label="性别" :label-width="formLabelWidth">
-           <el-radio v-model="CustomerService.gender" label="男" >男</el-radio>
-          <el-radio v-model="CustomerService.gender" label="女">女</el-radio>
-        
+          <el-form-item label="性别" prop='gender'  :label-width="formLabelWidth">
+            <el-radio v-model="CustomerService.gender" label="男" >男</el-radio>
+            <el-radio v-model="CustomerService.gender" label="女">女</el-radio>
           </el-form-item>
+
         </el-form>
-
-
         <div slot="footer" class="dialog-footer">
-         
-          
           <el-button size="medium" type="primary" @click="toSave">确 定</el-button>
         </div>
       </el-dialog>
 
-
-
-
-
-
       <el-button type="primary" size="mini" @click="warning1">导入客服</el-button>
-
-
-
-      </div>
-
-
-
-
+    </div>
         <!-- 选择下拉框 -->
-    
-     <div class="searchDiv">
+    <div class="searchDiv">
       <el-select 
       v-model="status"
       @change="stuatsChang"
       size="mini" 
       style="width:131px;" 
       clearable placeholder="状态">
-    <el-option
+      <el-option
       v-for="item in statusData"
       :key="item"
       :label="item"
       :value="item">
-    </el-option>
-  </el-select>
-  <el-select 
-  v-model="gender" 
-  @change="genderChang" 
-  size="mini" 
-  style="width:131px;" 
-  clearable placeholder="性别">
-    <el-option
-      v-for="item in genderData"
-      :key="item"
-      :label="item"
-      :value="item">
-    </el-option>
- 
-  </el-select>
-
-
-
+      </el-option>
+      </el-select>
+      <el-select 
+        v-model="gender" 
+        @change="genderChang" 
+        size="mini" 
+        style="width:131px;" 
+        clearable placeholder="性别">
+        <el-option
+        v-for="item in genderData"
+        :key="item"
+        :label="item"
+        :value="item">
+        </el-option>
+      </el-select>
     </div>
 
   <div class="seleteDiv1">
     <el-select 
-    size="mini" 
-    style="width:100px;"
-    v-model="value" 
-    clearable placeholder="请选择" 
-    @change="seleteChang" >
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-
-    </el-option>
-   
-  </el-select>
-   <el-input
+      size="mini" 
+      style="width:100px;"
+      v-model="value" 
+      clearable placeholder="请选择" 
+      @change="seleteChang" >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
+    <el-input
       style="width:120px"
       size="mini"
       placeholder="请输入内容"
@@ -113,125 +93,91 @@
       clearable
       @change="inputChang"
     >
-      
     </el-input>
- <el-button icon="el-icon-search" size='mini'  @click="seach" ></el-button>
+    <el-button icon="el-icon-search" size='mini'  @click="seach" ></el-button>
   </div>
 
 
-
-{{value}}
-{{input}}
     <!-- 界面数据主体 -->
     <div  id="data">
-       <el-table
-    ref="multipleTable"
-    :data=" CustomerServiceList"
-    tooltip-effect="dark"
-    style="width: 100%"
-    @selection-change="SelectionChange">
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      prop="username"
-      label="用户名"
-      >
-      <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
-    </el-table-column>
-    <el-table-column
-      prop="realname"
-      label="姓名"
-      >
-    </el-table-column>
-    <el-table-column
-      prop="gender"
-      label="性别"
-     > 
-     <!-- show-overflow-tooltip -->
-    </el-table-column>
-     <el-table-column
-      prop="status"
-      label="状态"
-      >
-    </el-table-column> 
-   <el-table-column
-   
-      label="分配工作"
-      width="120">
-      <template slot-scope="scope">
-        <el-button
-         @click="toEdit(scope.row)"
-         type="text"
-          size="small"
-          
-          >
-          分配
-        </el-button>
-      </template>
-    </el-table-column>
+      <el-table
+        ref="multipleTable"
+        :data=" CustomerServiceList"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="SelectionChange">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            prop="username"
+            label="用户名"
+            >
+          </el-table-column>
+          <el-table-column
+            prop="realname"
+            label="姓名"
+            >
+          </el-table-column>
+          <el-table-column
+            prop="gender"
+            label="性别"
+          > 
+          </el-table-column>
+          <el-table-column
+            prop="status"
+            label="状态"
+            >
+          </el-table-column> 
+          <el-table-column
+              label="分配工作"
+              width="120">
+            <template slot-scope="scope">
+              <el-button
+                @click="toAllot(scope.row)"
+                type="text"
+                size="small">分配
+              </el-button>
+            </template>
+          </el-table-column>
 
+          <el-table-column table-column
+            label="操作"
+            width="120">
+            <template slot-scope="scope">
+              <el-button
+              @click="toDelete(scope.row)"
+                type="text"
+                size="small">
+                移除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      <div  class="ye" style="text-align:right; margin-top:5px">
+        <el-pagination :page-size="4"
+        @current-change="CurrentChange1"
+        :current-page.sync="currentPage"
+        background
+        layout="prev, pager, next"
+        :total="CustomerServiceData.length">
+        </el-pagination  >
+      </div>
 
- 
-
-
-
-
-
+      <div class="button_3" style="margin-top: 20px">
+        <el-button type="info" plain  @click="toggleSelection" size='mini'>自动分配</el-button>
+        <el-button type="info" plain  @click="toggleSelection" size='mini'>自动填满</el-button>
+      </div>
+    </div>
 
     
-    <el-table-column
+    <!-- 弹出框  -->
    
-      label="操作"
-      width="120">
-      <template slot-scope="scope">
-        <el-button
-         @click="toDelete(scope.row)"
-          type="text"
-          size="small">
-          移除
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <div style="text-align:right; margin-top:5px">{{CustomerServiceData.length}}
-    <el-pagination :page-size="4"
-     @current-change="CurrentChange1"
-    :current-page.sync="currentPage"
-    background
-    layout="prev, pager, next"
-    :total="CustomerServiceData.length">
-</el-pagination  >
- </div>
-
-
-
-   <!-- 分配分页 -->
- <!-- <div style="text-align:right; margin-top:5px">{{findAllEmpJobData.length}}
-    <el-pagination :page-size="4"
-     @current-change="CurrentChange1"
-    :current-page.sync="currentPage"
-    background
-    layout="prev, pager, next"
-    :total="findAllEmpJobData.length">
-</el-pagination  >
- </div> -->
-
-
-
-
-
-  <div style="margin-top: 20px">
-    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-    <el-button @click="toggleSelection()">取消选择</el-button>
-  </div>
-    </div>
-     
-  <el-dialog title="收货地址" :visible.sync="scopeVisible">
+  <el-dialog title="工作分配" :visible.sync="scopeVisible">
    <el-table
     ref="multipleTable"
-    :data="findAllEmpJobData"
+    :data="findAllEmpJobList"
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="SelectionChange"
@@ -241,11 +187,10 @@
       width="55">
     </el-table-column>
     <el-table-column
-
       prop='jobhunter.realname'
       label="求职人"
      >
-      <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
+      
     </el-table-column>
     <el-table-column
       prop="jobhunter.telephone"
@@ -255,29 +200,37 @@
     <el-table-column
       prop="employment.job"
       label="求职岗位"
-      
-      >
-    </el-table-column>
-    <el-table-column
-      prop="employment.job"
-      label="求职岗位"
-      
       >
     </el-table-column>
     <el-table-column
       
-      label="求职岗位"
-      
-      >无
+      label="分配工作"
+     
+      ><template slot-scope="scope">
+        无
+      </template>
     </el-table-column>
+   
+    
     <el-table-column
       prop="employment.publishTime"
       label="申请时间"
       
       >
     </el-table-column>
-
   </el-table>
+  
+  
+    <!-- 分配分页 -->
+ <div style="text-align:right; margin-top:5px">
+    <el-pagination :page-size="4"
+     @current-change="CurrentChange_2"
+    :current-page.sync="currentPage_2"
+    backgroundt
+    layout="prev, pager, next"
+    :total="findAllEmpJobData.length">
+</el-pagination  >
+ </div>
 </el-dialog>
 
   </div>
@@ -292,7 +245,8 @@ import {deleteCustomerServiceById,
         findBusinesByGender,
         saveOrUpdateCustomerService,
         findCustomerServiceById}  from "@/api/service.js"
-import {findAllEmpJobWithJobhAndEmpl} from '@/api/jab.js'        
+        
+import {findAllEmploymentJobhunterWithJobhAndEmpl} from '@/api/employmentJobhunter.js'        
 import config from '@/utils/config.js'
 export default {
   data() {
@@ -303,14 +257,9 @@ export default {
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }],
-
-
-
-
-
-
       // 默认页数
       currentPage:1,
+      currentPage_2:1,
       //状态
       status:"",
       // 性别
@@ -323,16 +272,23 @@ export default {
       genderData:[],
       // 客服数据数组
       CustomerServiceData:[],
-      CustomerServiceID:[],
+      CustomerServiceID:'',
       // 模态框显示状态
      dialogFormVisible:false,
 
      scopeVisible:false,
     //  模态输入框宽度
-      formLabelWidth:'120px',
+      formLabelWidth:"80px",
      
       radio:"1",
+      // 校验规则
+    rules:{
+        username: [{ required: true, message: "请输入用户", trigger: "blur" }],
+        realname: [{ required: true, message: "请输入真实姓名", trigger: "blur" }],
+        status: [{ required: true, message: "请输入目前状态", trigger: "blur" }],
+        gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
 
+    },
       // 关键字搜索词
        options: [{
           value: 'username',
@@ -354,6 +310,8 @@ export default {
         findAllEmpJob:'',
         findAllEmpJobData:[],
 
+        ids:[],
+
     };
   },
 
@@ -367,41 +325,91 @@ export default {
       let page =this.currentPage;
      
       return  temp.slice((page-1)*pageSize,pageSize*page);},
-      // findAllEmpJobList(){
-      //     let temp=[...this.findAllEmpJobData];
-      //     let pageSize = 4;
-      //     let page =this.currentPage;
+
+      findAllEmpJobList(){
+          let temp=[...this.findAllEmpJobData];
+          let pageSize_2 = 4;
+          let page =this.currentPage_2;
      
-      // return  temp.slice((page-1)*pageSize,pageSize*page);
-      // }
+      return  temp.slice((page-1)*pageSize_2,pageSize_2*page);
+      }
       
 
   },
   methods: {
+    toggleSelection(){
+      this.$notify({
+          title: '提示',
+          message: '该功能暂未开放',
+          type: 'warning'
+        });
+    },
+
+    //弹框多选按钮
+    SelectionChange(val){
+        let ids = val.map(item=>{
+          return item.id;
+        })
+        this.ids=ids;
+    },
+
     warning1(){
            this.$confirm('该功能暂未开放', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         })
-       
+   },
+
+  //时间处理
+    timeData(){
+      this.findAllEmpJobData.forEach(item=>{
+        item.employment.publishTime=item.employment.publishTime.slice(0,10)
+      })
     },
 
 
-  async  toEdit(row){
-     let res = await findAllEmpJobWithJobhAndEmpl();
+
+  async  toAllot(row){
+   
+    
+      console.log(row);
+      this.CustomerServiceID=row;
+      console.log( this.CustomerServiceID.i);
+     let res = await findAllEmploymentJobhunterWithJobhAndEmpl();
+     
       this.findAllEmpJobData =res.data;
+      
+      this.timeData();
+      
      this.scopeVisible=true;
+    
    },
+
+
 
    async genderChang(val){
 
-     this.status='';
+    //  this.status='';
 
       if(val){
         try{
          let res  = await findBusinesByGender({gender:val});
-       this.CustomerServiceData=res.data;
+
+         let Arr =[ ...res.data];
+         if(this.status){
+            Arr= Arr.filter(item=>{
+                return item.status===this.status
+
+            })
+         }else{
+            this.CustomerServiceData =  res.data;
+         }
+
+
+       this.CustomerServiceData=Arr;
+
+       
         this.$notify({
           title: '成功',
           message: '这是一条成功的提示消息',
@@ -414,7 +422,15 @@ export default {
 
    }
       }else{
-        this.findAllSer();
+        if(this.status){
+
+            let res = await findCustomerServiceByEducation({status:this.status}); 
+             this.CustomerServiceData =  res.data;
+
+        }else{
+          this.findAllSer();
+        }
+        
       }
 
       
@@ -426,12 +442,24 @@ export default {
 
 // 通过状态查找商家信息
   async  stuatsChang(val){
-    this.gender='';
+    // this.gender='';
       if(val){
         try{
-            let res = await findCustomerServiceByEducation({status:val});
-            this.CustomerServiceData=res.data;
-            console.log(res.data);
+
+            let res = await findCustomerServiceByEducation({status:val}); 
+               
+         let Arr =[ ...res.data];
+         if(this.gender){
+            Arr= Arr.filter(item=>{
+                return item.gender===this.gender
+
+            })
+         }else{
+            this.CustomerServiceData =  res.data;
+         }
+
+
+       this.CustomerServiceData=Arr;
             this.$notify({
                 title: '成功',
                 message: '这是一条成功的提示消息',
@@ -443,7 +471,14 @@ export default {
         }
           
       }else{
-        this.findAllSer();
+          if(this.gender){
+
+             let res  = await findBusinesByGender({gender:this.gender}); 
+             this.CustomerServiceData =  res.data;
+
+        }else{
+          this.findAllSer();
+        }
       }
 
     
@@ -466,12 +501,8 @@ async seach(){
       
     
       let res =await findCustomerServiceByUsername({username:inp})
-      console.log(res,'---------------')
     
       this.CustomerServiceData = res.data;
-
-     
-    
   }else if (this.value==='gender'){ 
     let res =await findBusinesByGender({gender:inp})
     this.CustomerServiceData = res.data;
@@ -520,23 +551,15 @@ async seach(){
   async  toSave(){
         try{
              let res =await saveOrUpdateCustomerService(this.CustomerService);
-        this.dialogFormVisible = false;
-        this.findAllSer();
-        console.log(res);
-         config.successMsg(this,"保存数据成功")
-        }catch(err){
-          console.log(err);
-          config.errorMsg(this,'查找错误');
-        }
-
-       
-
+              this.dialogFormVisible = false;
+              this.findAllSer();
+         
+               config.successMsg(this,"保存数据成功")
+          }catch(err){
+          
+            config.errorMsg(this,'数据不完整，无法添加！');
+          }
     },
-
-
-
-
-
 // 删除数据操作
    async  toDelete(row){
         let id =row.id;
@@ -553,12 +576,6 @@ async seach(){
            config.errorMsg(this,'查找错误');
         }
      },
-
-
-
-
-
-
     //  分页功能
  SelectionChange(val){
       
@@ -570,7 +587,12 @@ async seach(){
       this.currentPage=val;
 
     },
+      CurrentChange_2(val){
 
+          this.currentPage_2=val;
+
+
+      },
 
 // 查找所有求职信息
   
@@ -585,13 +607,7 @@ async seach(){
           this.CustomerServiceData = res.data;
          
 
-           let idArr= res.data.map((item)=>{   //提取状态信息
-            // console.log( item.status,"+++++++++");
-            return item.id;})
-            this.CustomerServiceID = idArr;
 
-
-          // console.log(res.data,'-----------------');
           let statusArr = res.data.map((item)=>{   //提取状态信息
             // console.log( item.status,"+++++++++");
             return item.status;
@@ -599,11 +615,17 @@ async seach(){
           this.statusData = [...new Set(statusArr)];  //Set集合去重，set中没有重复数据
           
 
+
+
           let genderArr = res.data.map((item)=>{
             // console.log( item.gender,"+++++++++");  //提取性别信息
             return item.gender;
           });
           this.genderData = [...new Set(genderArr)];  //Set集合去重，set中没有重复数据
+
+
+
+
 
 
         } catch (error) {
@@ -640,8 +662,16 @@ async seach(){
    position:relative;
    
    top:-30px;
-  left:1050px;
-  }
-
+  left:1050px; 
+   margin-bottom:-20px;
   
+  }
+ .ye{ position:relative;
+   float:right;
+   z-index:100;
+   }
+  .button_3{  
+    position:relative;
+      top:-10px;
+  }
 </style>

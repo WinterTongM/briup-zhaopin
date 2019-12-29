@@ -3,7 +3,7 @@
  * 招聘审核页面
  * @Date: 2019-12-23 17:11:53 
  * @Last Modified by: LeiHaha
- * @Last Modified time: 2019-12-29 13:56:09
+ * @Last Modified time: 2019-12-29 15:46:32
  */
 <template>
   <div id="doingData">
@@ -16,7 +16,32 @@
           :value="item">
         </el-option>
       </el-select>
+      <div class="seleteDiv">
+      <el-select 
+        size="mini" 
+        style="width:100px;"
+        v-model="value" 
+        clearable placeholder="请选择" 
+        @change="seleteChang" >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-input
+        style="width:120px"
+        size="mini"
+        placeholder="请输入内容"
+        v-model="input"
+        clearable
+        @change="inputChang">
+      </el-input>
+      <el-button icon="el-icon-search" size='mini'  @click="seach" ></el-button>
+      </div>
     </div>
+
     <div class="tebleDiv">
       <el-table ref="multipleTable" :data="doingList" tooltip-effect="dark" style="width: 100%" @selection-change="selectionChange">
         <el-table-column align="center" type="selection" width="55"></el-table-column>
@@ -24,6 +49,7 @@
         <el-table-column align="center" prop="contactName" label="发布人"></el-table-column>
         <el-table-column align="center" prop="contactPhone" label="联系方式"></el-table-column>
         <el-table-column align="center" prop="job" label="职位"></el-table-column>
+        <el-table-column align="center" prop="city" label="城市"></el-table-column>
         <el-table-column align="center" prop="publishTime" label="发布时间"></el-table-column>
         <el-table-column align="center" label="详情">
           <template slot-scope="scope">
@@ -94,13 +120,17 @@
 </template>
 
 <script>
-import { findAllEmployment,findEmploymentByJob,saveEmploymentOrUpdate,findEmploymentById} from "@/api/employment.js";
+import { findAllEmployment,findEmploymentByJob,saveEmploymentOrUpdate,findEmploymentById,findEmploymentByTitle,findEmploymentByCity} from "@/api/employment.js";
 import config from '@/utils/config.js';
 export default {
   data() {
     return {
       //职位
       job:'',
+      //标题数组
+      titleData:[],
+      //城市数组
+      cityData:[],
       //职位数组
       jobData:[],
       //招聘中信息数组
@@ -117,9 +147,24 @@ export default {
       seeVisible:false,
       //当前查看的对象
       currentBus:{},
+      input:'',
+      input:[],
+      // value: 'status',
+   options: [{
+          value: 'title',
+          label: '标题'
+        }, {
+          value: 'city',
+          label: '城市'
+        },
+        ],
+
+
+
     };
   },
   computed: {
+    
     //分页数据
     doingList(){
       let temp =[...this.doingData];
@@ -129,6 +174,37 @@ export default {
     },
   },
   methods: {
+    //搜索
+    async seach(){
+      let inp = this.input;
+      if(this.value==='title'){  
+          let res =await findEmploymentByTitle({title:inp})
+          this.doingData = res.data;
+      }else if (this.value==='city'){ 
+        let res =await findEmploymentByCity({city:inp})
+        this.doingData = res.data;
+      }else{
+
+            this.$confirm('请输入搜索内容！', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            })
+      }
+      },
+    //输入
+    inputChang(val){
+      if(val===''){
+        this.findAllEmp();
+      }
+    },
+    //选择
+    seleteChang(val){
+      this.input='';  
+      if(val===''){
+       this.findAllEmp();
+      }
+    },
     //页数发生改变
     pagechange(page){
       this.currentPage = page;
@@ -210,6 +286,16 @@ export default {
         this.timeDataClear();
         // console.log(this.doingData);
         // item.publishTime = timeArr;
+         //标题数组 
+        let titleArr = res.data.map((item)=>{
+          return item.title;
+        });
+        this.titleData = [...new Set(titleArr)];
+         //城市数组 
+        let cityArr = res.data.map((item)=>{
+          return item.city;
+        });
+        this.cityData = [...new Set(cityArr)];
         //职位数组 
         let jobArr = res.data.map((item)=>{
           return item.job;
@@ -262,5 +348,8 @@ export default {
 }
 .imgDiv{
   text-align: center;
+}
+.seleteDiv{
+float: right;
 }
 </style>

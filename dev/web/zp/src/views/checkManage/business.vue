@@ -2,14 +2,14 @@
  * @Author: liuyr 
  * 商家审核页面
  * @Date: 2019-12-23 17:11:53 
- * @Last Modified by: LeiHaha
- * @Last Modified time: 2019-12-29 11:30:28
+ * @Last Modified by: YangHt
+ * @Last Modified time: 2019-12-29 11:37:07
  */
 <template>
   <div id="businessCheck">
-    <!-- {{statusList}} -->
+   
     <div class="searchDiv">
-      <el-select @change="statusChange" v-model="status" clearable placeholder="全部">
+      <el-select @change="statusChange" v-model="status" size="mini" clearable placeholder="全部">
         <el-option
           v-for="item in staData"
           :key="item"
@@ -164,6 +164,7 @@ export default {
         let rs = await saveOrUpdateBusiness(res.data);
         this.findAllBus();
       })
+
     },
     //复选框选中切换
     selectionChange(val){
@@ -249,4 +250,10 @@ export default {
 .imgDiv{
   text-align: center;
 }
+
+.searchDiv{
+    margin-bottom: 10px;
+}
+
+
 </style>

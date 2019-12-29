@@ -1,8 +1,8 @@
 /*
  * @Author: wenxt 
  * @Date: 2019-12-25 11:27:15 
- * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 12:23:51
+ * @Last Modified by: wangzai
+ * @Last Modified time: 2019-12-29 16:37:22
  */
 
 <template>
@@ -23,7 +23,7 @@
           <el-button type="text" @click="addCity(item)">添加</el-button>
         </div>
         <div class="cityDataList inputDiv" v-else>
-          <input v-model="cityName" type="text" >
+          <input placeholder="请输入城市名称" v-model="cityName" type="text" >
           <button @click="cityDataAdd(item)">添加</button>
         </div>
       </el-card>
@@ -43,7 +43,7 @@
     <el-dialog title="省份添加" :visible.sync="addProVisible" width="30%">
       <el-form>
         <el-form-item label="省份名称:" :label-width="formLabelWidth">
-          <el-input v-model="provinceName"></el-input>
+          <el-input placeholder="请输入省份名" v-model="provinceName"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -65,7 +65,7 @@ export default {
       cityData:[],
       //将省份信息和城市信息做成一个二维数组，通过省份id找到所有该省份的城市名和城市id
       provinceData:[],
-      cityName:'请输入城市名称',
+      cityName:'',
       //添加省份模态框显示与否
       addProVisible:false,
       provinceName:'',
@@ -137,7 +137,7 @@ export default {
         this.findProvinceData();
         val.butStatu = true;
         config.successMsg(this,'城市添加成功');
-        this.cityName = '请输入城市名称';
+        this.cityName = '';
       } catch (error) {
         config.errorMsg(this,'城市添加失败');
         console.log(error);
@@ -178,7 +178,7 @@ export default {
 }
 .cityDataList{
   display: inline;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .addBut{
   float: right;

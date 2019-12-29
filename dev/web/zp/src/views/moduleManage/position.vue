@@ -2,8 +2,8 @@
  * @Author: wenxt 
  * 职位管理页面
  * @Date: 2019-12-29 08:40:04 
- * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 12:23:47
+ * @Last Modified by: wangzai
+ * @Last Modified time: 2019-12-29 16:37:49
  */
 <template>
   <!-- 职位管理页面 -->
@@ -182,7 +182,8 @@ export default {
 }
 .jobDataList{
   display: inline;
-  margin-right: 10px;
+  margin-right: 20px;
+
 }
 .addBut{
   float: right;

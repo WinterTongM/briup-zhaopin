@@ -2,14 +2,14 @@
  * @Author: wenxt 
  * 福利管理页面
  * @Date: 2019-12-25 14:55:59 
- * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 12:34:14
+ * @Last Modified by: wangzai
+ * @Last Modified time: 2019-12-29 16:22:49
  */
 
 <template>
   <div id="moduleBoon">
     <div class="searchDiv">
-      <el-select @change="welfareChange" size="mini" v-model="welfare" clearable placeholder="全部">
+      <el-select @change="welfareChange" size="mini" v-model="welfare" clearable placeholder="全部" style="width:131px;">
         <el-option
           v-for="item in welfareName"
           :key="item"
@@ -44,8 +44,8 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button  v-if="scope.row.status === '使用中'" @click="toBlocking(scope.row)" type="primary" plain size="small">冻结</el-button>
-            <el-button v-else type="success" plain size="small" @click="toRegain(scope.row)">恢复</el-button>
+            <el-button  v-if="scope.row.status === '使用中'" @click="toBlocking(scope.row)" type="text"  size="small">冻结</el-button>
+            <el-button v-else type="text"  size="small" @click="toRegain(scope.row)">恢复</el-button>
           </template>
         </el-table-column>
       </el-table>

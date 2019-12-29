@@ -1,25 +1,33 @@
 /*
- * @Author: liuyr 
- * 用户列表页面
- * @Date: 2019-12-23 17:11:53 
- * @Last Modified by: Ryan
- * @Last Modified time: 2019-12-29 09:41:21
+ * @Author: YangHt 
+ * @Date: 2019-12-29 12:53:39 
+ * @Last Modified by: YangHt
+ * @Last Modified time: 2019-12-29 16:38:22
  */
 <template>
   <div id="userList">
-    {{ids}}
+    
     <!-- 用户列表页面 -->
     <div class="buttonDiv" align="right">
-    <el-button @click="toAdd" size="small" type="danger">添加用户</el-button>
-    <el-button size="small" type="primary">导入用户</el-button>
+    <el-button @click="toAdd" size="mini" type="danger">添加用户</el-button>
+     <el-button plain @click="toUp"  size="mini" type='primary'>
+    导入用户
+    </el-button>
+
+
+
+
+
+
+    
     </div>
 
-    <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
+    <el-dialog title="添加用户"  :rules="rules" :visible.sync="dialogFormVisible">
     <el-form :model="jobhunter">
-    <el-form-item label="*用户名" :label-width="formLabelWidth">
+    <el-form-item label="*用户名" prop='username' :label-width="formLabelWidth">
     <el-input v-model="jobhunter.username" ></el-input>
     </el-form-item>
-    <el-form-item label="*手机号" :label-width="formLabelWidth">
+    <el-form-item label="*手机号" prop='telephone' :label-width="formLabelWidth">
     <el-input v-model="jobhunter.telephone"></el-input>
     </el-form-item>
     </el-form>
@@ -28,17 +36,10 @@
     </div>
     </el-dialog>
 
-    <!--点击导入用户按钮触发模态框-->
-    <!-- <el-upload
-    class="upload-demo"  drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
-    <i class="el-icon-upload"></i>
-    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload> -->
-
+   
     <!-- 选择器 -->    
     <div class="searchDiv">
-    <el-select @change="educationChange" v-model="education"  placeholder="学历">
+    <el-select @change="educationChange" v-model="education" size='mini' placeholder="学历">
     <el-option
       v-for="item in educationData"
       :key="item"
@@ -46,7 +47,7 @@
       :value="item">
     </el-option>
     </el-select>
-    <el-select @change="genderChange" v-model="gender"  placeholder="性别">
+    <el-select @change="genderChange" v-model="gender"   size='mini' placeholder="性别">
     <el-option
       v-for="item in genderData"
       :key="item"
@@ -54,19 +55,6 @@
       :value="item">
     </el-option>
     </el-select>
-
-    
-    <!-- 搜索框-->
-    <!-- <div style="margin-top: 15px; width: 20%;  float: right">
-  <el-input placeholder="请输入关键字" v-model="input" class="input-with-select">
-    <el-button slot="append" icon="el-icon-search" @click="tosousuo(input)"></el-button>
-    </el-input>
-</div>
-     <el-select v-model="select" slot="prepend" placeholder="关键字" style="margin-top: 15px; width: 10%;  float: right">
-      <el-option label="" value=""></el-option>
-      <el-option label="学历" value="学历"></el-option>
-      <el-option label="性别" value="2"></el-option>
-    </el-select> -->
     <div class="keywords">
       <el-input class="search_part"  @change="reachkeyWord" size="mini" placeholder="请输入关键字" v-model="inputWord" 
       style="margin-top: 5px; width: 15%;  float: right">
@@ -282,6 +270,13 @@ export default {
 
   //事件处理函数
   methods: {
+    toUp(){
+       this.$notify({
+          title: '消息',
+          message: '该功能暂未开发!',
+          type: 'warning'
+        });
+    },
     //搜索
     keyWordTypeChange(){
       //只改变属性值
@@ -528,19 +523,37 @@ export default {
   mounted() {}
 };
 </script>
-<style scoped>
-.searchDiv{
- margin:20px;
- 
-}
+<style lanf='scss' scoped>
 .buttonDiv{
-  margin-top: -70px;
+  float: right;
+  position: relative;
+  top:-50px;
+  right: 25px;
 }
 .pageDiv{
   float: right;
-  margin-top: 10px;
+  
 }
 .dialog-footer{
 text-align: center;
 }
+
+/* .searchDiv{
+  margin-bottom:-20px;
+  margin-bottom: 10px;
+} */
+.userList{
+  position: absolute;
+ 
+
+
+}
+.keywords{
+
+  position: relative;
+  right:20px;
+  top:-34px;
+ 
+}
+
 </style>

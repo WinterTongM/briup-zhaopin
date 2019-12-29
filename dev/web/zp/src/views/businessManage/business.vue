@@ -2,14 +2,14 @@
  * @Author: liuyr 
  * 商家列表页面
  * @Date: 2019-12-23 17:11:53 
- * @Last Modified by: Mo
- * @Last Modified time: 2019-12-28 21:52:37
+ * @Last Modified by: wangzai
+ * @Last Modified time: 2019-12-29 16:20:27
  */
 <template>
 <!-- 选择框 -->
   <div>   
     <div class='searchDiv'>
-         <el-select v-model="province" clearable placeholder="省份" @change="provinceChange"> <!--//不改变不触发事件  //不需要再传参，已经有‘当前选中的option‘值 -->
+         <el-select size="mini" v-model="province" clearable placeholder="省份" @change="provinceChange" style="width:131px;"> <!--//不改变不触发事件  //不需要再传参，已经有‘当前选中的option‘值 -->
             <el-option
               v-for="item in provinceData"
               :key="item.id"
@@ -17,7 +17,7 @@
               :value="item.name">
             </el-option>
           </el-select>
-          <el-select v-model="city" clearable placeholder="城市" @change="cityChange">
+          <el-select size="mini" v-model="city" clearable placeholder="城市" @change="cityChange" style="width:131px;">
             <el-option
               v-for="item in find"
               :key="item.id"
@@ -25,7 +25,7 @@
               :value="item.name">
             </el-option>
           </el-select>
-           <el-select v-model="industry" clearable placeholder="行业" @change="industryChange">  <!--data 是字符串 -->
+           <el-select size="mini" v-model="industry" clearable placeholder="行业" @change="industryChange" style="width:131px;">  <!--data 是字符串 -->
             <el-option
               v-for="item in industryData"
               :key="item"
@@ -33,7 +33,7 @@
               :value="item">
             </el-option>
           </el-select>
-           <el-select v-model="scale" clearable placeholder="规模" @change="scaleChange">
+           <el-select size="mini" v-model="scale" clearable placeholder="规模" @change="scaleChange" style="width:131px;">
             <el-option
               v-for="item in scaleData"
               :key="item"
@@ -43,8 +43,6 @@
           </el-select>
       
     </div>
-    
-  <br><br>
 <!-- 表格表头 -->
    <el-table
     ref="multipleTable"
@@ -64,14 +62,14 @@
    
 <!-- **********************************************操作按钮**************** -->   
     <el-table-column align="center" label="详情" ><template slot-scope="scope">    
-        <el-button @click="toView(scope.row)" type="text" size="small">查看</el-button>  <!--//通过scope.row可拿到所在行的对象 -->
+        <el-button @click="toView(scope.row)" type="text" size="mini">查看</el-button>  <!--//通过scope.row可拿到所在行的对象 -->
     </template></el-table-column>
 
   <el-table-column align="center" label="操作"> 
       <!-- slot写在组件template的哪块，父组件传过来的模板将来就显示在哪块。 -->
       <template slot-scope="scope">    
-        <el-button @click="toEdit(scope.row)" type="text" size="small">修改</el-button>
-        <el-button @click="toDelect(scope.row.id)" type="text" size="small">删除</el-button>  <!--//通过scope.row可拿到所在行的对象 -->
+        <el-button @click="toEdit(scope.row)" type="text" size="mini">修改</el-button>
+        <el-button @click="toDelect(scope.row.id)" type="text" size="mini">删除</el-button>  <!--//通过scope.row可拿到所在行的对象 -->
       </template>
     </el-table-column>
   </el-table>
@@ -165,7 +163,7 @@
 </el-dialog>
 
 <!-- **********************************************  详情框**************** -->
- <el-dialog :title="busMsg.name" :visible.sync="FormVisible">
+ <el-dialog :title="busMsg.name" :visible.sync="FormVisible" class="dialogShow">
   <el-card >
     <div class="seeDiv" >      
      <span>行业：</span> {{busMsg.industry}}
@@ -535,9 +533,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>  //scss可写嵌套代码
-.drop{
-  border-radius: 30px;
-
+.searchDiv{
+  margin-bottom: 10px;
 }
 .footDiv{
   overflow: hidden;
@@ -549,7 +546,6 @@ export default {
     float: right;
   }
 }
-
 .seeDiv{
   border-bottom:1px solid #ccc;
   line-height: 30px;
@@ -562,6 +558,8 @@ export default {
   font-size:15px ;
   border-bottom:1px solid #ccc;
 }
+.dialogShow{
 
+}
 
 </style>

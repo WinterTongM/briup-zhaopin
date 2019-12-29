@@ -1,8 +1,8 @@
 /*
  * @Author: Wuwangzai 
  * @Date: 2019-12-28 15:12:59 
- * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 10:14:12
+ * @Last Modified by: wangzai
+ * @Last Modified time: 2019-12-29 17:16:44
  */
 
 <template>
@@ -10,7 +10,7 @@
   <div id="jobList"> 
  
 
-    <div id="button1">
+    <div id="button1" style='margin-bottom:10px'>
       <el-button size="mini" type="primary">待联系</el-button>
       
     </div> 
@@ -60,7 +60,7 @@
     
      
   </el-table>
-<div style="text-align:right; margin-top:5px">{{findAllEmploymentJobhunterWithJobhAndEmplData.length}}
+<div style="text-align:right; margin-top:5px">
     <el-pagination :page-size="10"
      @current-change="CurrentChange1"
     :current-page.sync="currentPage"
@@ -126,15 +126,12 @@
 
 
 
-
-
-
    </div>
 
 </template>
 
 <script>
-  import {findAllEmploymentJobhunterWithJobhAndEmpl  }  from "@/api/employmentJobhunter.js"
+  import {findAllEmploymentJobhunterWithJobhAndEmpl}  from "@/api/employmentJobhunter.js"
 export default {
   data() {
     return {

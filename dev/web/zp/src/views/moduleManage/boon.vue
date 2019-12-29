@@ -44,8 +44,8 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button  v-if="scope.row.status === '使用中'" @click="toBlocking(scope.row)" type="text"  size="small">冻结</el-button>
-            <el-button v-else type="text"  size="small" @click="toRegain(scope.row)">恢复</el-button>
+            <el-button class="block"  v-if="scope.row.status === '使用中'" @click="toBlocking(scope.row)" type="text"  size="small">冻结</el-button>
+            <el-button class="regain" v-else type="text"  size="small" @click="toRegain(scope.row)">恢复</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -269,6 +269,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .regain{
+    color: green;
+  }
   .searchDiv{
     margin-bottom: 10px;
   }

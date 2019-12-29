@@ -73,7 +73,7 @@ export default {
       //当前页码
       currentPage:1,
       //每页条数
-      pageSize:config.pageSize,
+      pageSize:5,
       reminder:'Please wait a moment',
       waiting:true,
     };
@@ -82,7 +82,7 @@ export default {
     provinceList(){
       let temp = [...this.provinceData];
       let page = this.currentPage;
-      let pageSize = config.pageSize;
+      let pageSize = this.pageSize;
       return temp.slice(pageSize*(page-1),pageSize*page);
     }
   },

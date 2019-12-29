@@ -39,7 +39,7 @@
    
     <!-- 选择器 -->    
     <div class="searchDiv">
-    <el-select @change="educationChange" v-model="education" size='mini' placeholder="学历">
+    <el-select @change="educationChange" v-model="education" clearable size='mini' placeholder="学历">
     <el-option
       v-for="item in educationData"
       :key="item"
@@ -47,7 +47,7 @@
       :value="item">
     </el-option>
     </el-select>
-    <el-select @change="genderChange" v-model="gender"   size='mini' placeholder="性别">
+    <el-select @change="genderChange" clearable v-model="gender"   size='mini' placeholder="性别">
     <el-option
       v-for="item in genderData"
       :key="item"
@@ -467,6 +467,7 @@ export default {
       },
       //查找所有性别信息
     async genderChange(val) {
+      this.education='';
       if(val){
       try {
         let res = await findJobhunterByGender({gender:val});
@@ -480,6 +481,7 @@ export default {
     },
      //查找所有学历信息
     async educationChange(val) {
+      this.gender='';
       if(val){
       try {
         let res = await findJobhunterByEducation({education:val});

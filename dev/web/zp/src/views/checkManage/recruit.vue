@@ -183,6 +183,7 @@ export default {
       }else if (this.value==='city'){ 
         let res =await findEmploymentByCity({city:inp})
         this.doingData = res.data;
+        this.timeDataClear();
       }else{
 
             this.$confirm('请输入搜索内容！', '提示', {

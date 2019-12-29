@@ -156,7 +156,7 @@
           </el-table-column>
         </el-table>
       <div  class="ye" style="text-align:right; margin-top:5px">
-        <el-pagination :page-size="4"
+        <el-pagination :page-size="7"
         @current-change="CurrentChange1"
         :current-page.sync="currentPage"
         background
@@ -321,7 +321,7 @@ export default {
     // 客服分页列表
      CustomerServiceList(){
       let temp=[...this.CustomerServiceData];
-      let pageSize = 4;
+      let pageSize = 7;
       let page =this.currentPage;
      
       return  temp.slice((page-1)*pageSize,pageSize*page);},

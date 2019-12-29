@@ -2,17 +2,15 @@
  * @Author: wenxt 
  * @Date: 2019-12-25 11:27:15 
  * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-28 21:30:40
+ * @Last Modified time: 2019-12-29 12:23:51
  */
 
 <template>
   <!-- 城市管理页面 -->
   <div id="moduleCity">
-    <!-- ------------------------------------------------- -->
     <div class="addBut">
       <el-button type="warning" icon="el-icon-circle-plus-outline" @click="addProvinceBtn">添加省份</el-button>
     </div>
-<!-- ------------------------------------------------- -->
     <div class="cardDiv" v-for="(item,index) in provinceList" :key="index">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -30,7 +28,6 @@
         </div>
       </el-card>
     </div>
-<!-- ------------------------------------------------- -->
     <div class="footerDiv">
       <div class="pageDiv">
         <el-pagination :current-page.sync = "currentPage" :page-sizes = "pageSize"
@@ -40,7 +37,9 @@
         </el-pagination>
       </div>
     </div>
-<!-- ------------------------------------------------- -->
+    <div class="waitDiv" v-if="waiting">
+      <h1>{{reminder}}</h1>
+    </div>
     <el-dialog title="省份添加" :visible.sync="addProVisible" width="30%">
       <el-form>
         <el-form-item label="省份名称:" :label-width="formLabelWidth">
@@ -75,6 +74,8 @@ export default {
       currentPage:1,
       //每页条数
       pageSize:config.pageSize,
+      reminder:'Please wait a moment',
+      waiting:true,
     };
   },
   computed: {
@@ -99,22 +100,16 @@ export default {
     async findProvinceData(){
       try {
         let res = await findAllProvince();
-        // console.log(res.data);
-        // this.provinceData = res.data;
         let temp = [...res.data];
-        // console.log(temp,'******');
         //获取省份对应的城市数组
         temp.forEach(async item=>{
           //item是对象
           let pId = item.id;
-          // console.log(item,'-----*-*-*-*-');
           try {
             let res = await findCityByProvinceId({provinceId:pId});
-            // console.log(res.data,'--------');
             item.butStatu = 'true';
             //butStatu为true则显示添加按钮，false显示输入框
             item.city = res.data;
-            // console.log(item);
           } catch (error) {
             config.errorMsg(this,'查找错误');
           }
@@ -122,6 +117,7 @@ export default {
         // 超时调用
         setTimeout(() => {
           this.provinceData = temp;
+          this.waiting = false;
         },2000);
       } catch (error) {
         config.errorMsg(this,'查找错误');
@@ -129,23 +125,21 @@ export default {
     },
     //添加城市按钮
     async addCity(val){
-      // console.log(val,'-------');
       val.butStatu = false;
     },
-    //添加城市(如果多个同时打开输入框的话，其中的cityName会跟着一起改变)
+    //添加城市
     async cityDataAdd(val){
       //需要省份pId和城市名称this.cityName
       let pId = val.id;
-      console.log(pId);
       let name = this.cityName;
-      console.log(name,'===');
       try {
         let res = await saveOrUpdateCity({provinceId:pId,name:name});
         this.findProvinceData();
         val.butStatu = true;
-        console.log('修改成功');
+        config.successMsg(this,'城市添加成功');
         this.cityName = '请输入城市名称';
       } catch (error) {
+        config.errorMsg(this,'城市添加失败');
         console.log(error);
       }
     },
@@ -179,6 +173,9 @@ export default {
 };
 </script>
 <style scoped>
+.waitDiv{
+  text-align: center;
+}
 .cityDataList{
   display: inline;
   margin-right: 10px;
@@ -191,4 +188,7 @@ export default {
   clear: both;
   margin-bottom: 20px;
 }
+.pageDiv{
+      float: right;
+    }
 </style>

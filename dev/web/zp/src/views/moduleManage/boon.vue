@@ -3,7 +3,7 @@
  * 福利管理页面
  * @Date: 2019-12-25 14:55:59 
  * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-28 18:09:33
+ * @Last Modified time: 2019-12-29 12:34:14
  */
 
 <template>
@@ -44,8 +44,8 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status === '使用中'" @click="toBlocking(scope.row)" type="text" size="small">冻结</el-button>
-            <el-button v-else type="text" size="small" @click="toRegain(scope.row)">恢复</el-button>
+            <el-button  v-if="scope.row.status === '使用中'" @click="toBlocking(scope.row)" type="primary" plain size="small">冻结</el-button>
+            <el-button v-else type="success" plain size="small" @click="toRegain(scope.row)">恢复</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -256,7 +256,6 @@ export default {
     },
     //页面改变
     pageChange(page){
-      // console.log(page,'!!!!!!!!!!');
       this.currentPage = page;
       // 让当前页发生改变
     },

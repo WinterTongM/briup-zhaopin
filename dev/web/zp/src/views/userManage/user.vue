@@ -3,7 +3,7 @@
  * 用户列表页面
  * @Date: 2019-12-23 17:11:53 
  * @Last Modified by: Ryan
- * @Last Modified time: 2019-12-28 09:14:47
+ * @Last Modified time: 2019-12-29 09:41:21
  */
 <template>
   <div id="userList">
@@ -17,19 +17,19 @@
     <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
     <el-form :model="jobhunter">
     <el-form-item label="*用户名" :label-width="formLabelWidth">
-    <el-input v-model="jobhunter.username" placeholder="请输入用户名"></el-input>
+    <el-input v-model="jobhunter.username" ></el-input>
     </el-form-item>
     <el-form-item label="*手机号" :label-width="formLabelWidth">
-    <el-input v-model="jobhunter.telephone" placeholder="请输入用户手机号"></el-input>
+    <el-input v-model="jobhunter.telephone"></el-input>
     </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="toSave">确 定</el-button>
+    <el-button type="primary" @click="toSave1('ruleForm')">确 定</el-button>
     </div>
     </el-dialog>
 
-    <!-- 点击导入用户按钮触发模态框
-    <el-upload
+    <!--点击导入用户按钮触发模态框-->
+    <!-- <el-upload
     class="upload-demo"  drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
     <i class="el-icon-upload"></i>
     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -55,17 +55,33 @@
     </el-option>
     </el-select>
 
+    
     <!-- 搜索框-->
-    <!-- <div size="mini" style="margin-top: 15px; width: 20%;  float: right">
-    <el-input placeholder="请输入内容" v-model="currentJo.education" class="input-with-select">
-    <el-select v-model="select" slot="prepend" placeholder="请选择">
-    <el-option label="用户名" value="1"></el-option>
-    <el-option label="姓名" value="2"></el-option>
-    <el-option label="学历" value="3"></el-option>
-    </el-select>
-    <el-button slot="append" icon="el-icon-search"></el-button>
+    <!-- <div style="margin-top: 15px; width: 20%;  float: right">
+  <el-input placeholder="请输入关键字" v-model="input" class="input-with-select">
+    <el-button slot="append" icon="el-icon-search" @click="tosousuo(input)"></el-button>
     </el-input>
-    </div>  -->
+</div>
+     <el-select v-model="select" slot="prepend" placeholder="关键字" style="margin-top: 15px; width: 10%;  float: right">
+      <el-option label="" value=""></el-option>
+      <el-option label="学历" value="学历"></el-option>
+      <el-option label="性别" value="2"></el-option>
+    </el-select> -->
+    <div class="keywords">
+      <el-input class="search_part"  @change="reachkeyWord" size="mini" placeholder="请输入关键字" v-model="inputWord" 
+      style="margin-top: 5px; width: 15%;  float: right">
+      <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+      <el-select class="search_part" @change="keyWordTypeChange" size="mini" v-model="keyWordType" clearable placeholder="关键字" 
+    style="margin-top: 5px; width: 10%;  float: right">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"></el-option>
+      </el-select>
+    </div>
+
     </div>
 
     <!-- 表格 -->
@@ -92,8 +108,80 @@
     </template>
     </el-table-column>
     </el-table>
+  </div>
 
-    <div class="footerDiv">
+<!-- 修改模态框 -->
+    <el-dialog title="修改用户信息" :visible.sync="editVisible" width="60%">
+      <el-form :model="currentJo" :rules="rules" ref="ruleForm">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item prop="username" label="用户名" :label-width="formLabelWidth">
+              <el-input v-model="currentJo.username" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="realname" label="真实姓名" :label-width="formLabelWidth">
+              <el-input v-model="currentJo.realname"></el-input>
+            </el-form-item>
+          </el-col>
+          </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item prop="telephone" label="手机号" :label-width="formLabelWidth">
+              <el-input v-model="currentJo.telephone"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="birth" label="出生年月" :label-width="formLabelWidth">
+              <el-input v-model="currentJo.birth"></el-input>
+            </el-form-item>
+          </el-col>    
+        </el-row> 
+
+        <el-row>
+
+         
+          
+          <el-col :span="12">
+                <el-form-item required label="学历" :label-width="formLabelWidth">
+                  <el-form-item prop="education">
+                    <el-select clearable v-model="currentJo.education" placeholder="请选择学历">
+                      <el-option
+                        v-for="item in educationData"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+             </el-form-item>
+          </el-col>
+
+        <el-col :span="12">
+                  <el-form-item required label="性别" :label-width="formLabelWidth">
+                  <el-form-item prop="gender">
+                    <el-select clearable v-model="currentJo.gender" placeholder="性别">
+                      <el-option
+                        v-for="item in genderData"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+              </el-form-item>
+           
+           </el-col>
+        </el-row>
+    </el-form>
+    
+      <div slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="editVisible = false">取 消</el-button>
+          <el-button size="mini" type="primary" @click="toSave('ruleForm')">确 定</el-button>
+        </div>
+     </el-dialog>
+
+     <div class="footerDiv">
     <!-- 批量删除按钮 -->
     <div class="btnDiv">
         <el-button @click="toBatchDelete" size="mini" type="danger" plain>批量删除</el-button>
@@ -108,9 +196,7 @@
        :total="jobhunterData.length"></el-pagination>
        </div>
   </div>
-
-  </div>
-
+  
   </div>
 </template>
 
@@ -126,6 +212,8 @@ import qs from "qs";
 export default {
   data() {
     return {
+      //输入
+      input:'',
       //当前页
       currentPage:1,
       //批量删除
@@ -153,12 +241,35 @@ export default {
       //表单左侧的文字宽度
       formLabelWidth:"120px",
       //表单中的数据对象
-      jobhunter:{
-        username:'',
-        telephone:'',
-      },
+      jobhunter:{},
+      //关键字类型
+      keyWordType:'',
+      // 输入的搜索关键字
+      inputWord:"",
+      // 输入的搜索分类
+      options:
+      [
+        {value: '选项1', label: '学历'}, 
+        {value: '选项2',label: '性别'},
+        {value: '选项3',label: '手机号'},    
+        {value: '选项4',label: '用户名'},
+      ],
+      //
+      
+      //选择
+      select: '',
+       //校验规则
+      rules: {
+        username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        realname: [{ required: true, message: "请输入真实姓名", trigger: "blur" } ],
+        telephone: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
+        gender: [{ required: true, message: "请输入性别", trigger: "blur" } ],
+        birth: [{ required: true, message: "请输入出生年月", trigger: "blur" }],
+        education: [{ required: true, message: "请输入学历", trigger: "blur" }],
+        
+      }
     };
-  },
+},
   computed: {
     //定义求职者列表，表格中的数据
     jobhunterList(){
@@ -171,6 +282,80 @@ export default {
 
   //事件处理函数
   methods: {
+    //搜索
+    keyWordTypeChange(){
+      //只改变属性值
+    },    
+    /**
+    * 输入关键字并按回车时触发的事件
+    * 作用：寻找含有关键字的记录，并显示
+    */
+    async reachkeyWord(keyWord){
+      // 选择某一方面搜索
+      // console.log("关键字类型："+this.keyWordType);
+      if(this.keyWordType){
+        try {
+          // 根据关键字类型调用方法
+          let res;
+          // 学历
+          if(this.keyWordType==this.options[0].value){
+            res=await findJobhunterByEducation({education :this.inputWord });
+            this.jobhunterData=res.data;
+            this.currentPage=1;
+          }
+          // 性别
+            else if(this.keyWordType==this.options[1].value){
+            res=await findJobhunterByGender({gender :this.inputWord });
+            this.jobhunterData=res.data;
+            this.currentPage=1;
+          }
+          // 手机号
+            else if(this.keyWordType==this.options[3].value){
+            res=await findJobhunterByTelephone({ telephone :this.inputWord });
+            this.jobhunterData=res.data;
+            this.currentPage=1;
+          }
+          // 用户名
+            else if(this.keyWordType==this.options[4].value){
+            res=await findJobhunterByUsername({ username :this.inputWord });
+            this.jobhunterData=res.data;
+            this.currentPage=1;
+          }                                    
+        } catch (error) {
+           
+            config.errorMsg(this, "通过关键字查找用户信息错误！");
+          }          
+        }
+        else{
+          // 弹出警告
+          config.errorMsg(this,"请选择关键字！");
+          // 恢复原本数据
+          this.findAllJo();
+        }
+    },
+
+
+     //保存
+    toSave(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          //保存
+          try {
+            let res = await saveOrUpdateJobhunter(this.currentJo);
+            if (res.status === 200) {
+              this.findAllJo();
+              this.editVisible = false;
+              config.successMsg(this, "修改成功");
+            } else {
+              config.errorMsg(this, "修改失败");
+            }
+          } catch (error) {
+         
+            config.errorMsg(this, "修改失败");
+          }
+        }
+      })
+    },
 
     //分页
     pageChange(page){
@@ -179,19 +364,26 @@ export default {
       this.currentPage = page;
     },
     
-    //保存
-      async toSave(){
-        console.log(this,jobhunter)
+   //保存
+      async toSave1(){
         try{
-          let res = await axios.post('/saveOrUpdate/Jobhunter',qs.stringify(this.jobhunter),
-          console.log(res))
+          let res = await saveOrUpdateJobhunter(this.jobhunter);
+          this.dialogFormVisible = false;
+          this.findAllJo();
+
+         config.successMsg(this, "保存数据成功");
         }catch(error){
-          config.errorMsg(this, "查找错误");
+          config.errorMsg(this, "保存数据不全");
         }
     },
+
+   
+     
     //新增按钮
     toAdd(){
       this.dialogFormVisible = true;
+      this.jobhunter={};
+      this.findAllJo;
     },
     //修改
     toEdit(row){
@@ -331,6 +523,7 @@ export default {
    this.findAllJo();
    this.genderChange();
    this.educationChange();
+   this.keyWordTypeChange();
   },
   mounted() {}
 };

@@ -1,14 +1,14 @@
 /*
  * @Author: wenxt 
  * @Date: 2019-12-25 11:26:52 
- * @Last Modified by:   wenxt 
- * @Last Modified time: 2019-12-25 11:26:52 
+ * @Last Modified by: wenxt
+ * @Last Modified time: 2019-12-29 09:04:14
  */
 
 import axios from '@/utils/axios'
 
 export function deleteCityById(param) {
-  return axios.get('/City/deleteById',{params:param});
+  return axios.post('/City/deleteById',param);
 }
 
 /* 查找数据 */

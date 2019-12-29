@@ -3,12 +3,11 @@
  * 福利管理页面
  * @Date: 2019-12-25 14:55:59 
  * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-27 17:28:09
+ * @Last Modified time: 2019-12-28 18:09:33
  */
 
 <template>
   <div id="moduleBoon">
-    <!-- {{welfareData}} -->
     <div class="searchDiv">
       <el-select @change="welfareChange" size="mini" v-model="welfare" clearable placeholder="全部">
         <el-option
@@ -70,13 +69,13 @@
 </template>
 
 <script>
-import {deleteWelfareById,findAllWelfare,findWelfareById,saveOrUpdateWelfare} from '@/api/welfare.js';
+import {deleteWelfareById,findAllWelfare,saveOrUpdateWelfare} from '@/api/welfare.js';
 import config from '@/utils/config.js';
 
 export default {
   data() {
     return {
-      //福利数据
+      //福利数据(这个数据是会变动的)
       welfareData:[],
       //福利数据备份
       welfareDataBackup:[],
@@ -89,6 +88,7 @@ export default {
       //每页条数
       pageSize:config.pageSize,
       ids:[],
+      names:[],
     };
   },
   computed: {
@@ -101,11 +101,11 @@ export default {
     }
   },
   methods: {
-    //获取福利数据(success)
+    //获取福利数据
     async findWelfare(){
       try {
         //页面回到首页
-        this.currentPage = 1;
+        // this.currentPage = 1;
         let res = await findAllWelfare();
         // console.log(res.data);
         this.welfareData = res.data;
@@ -120,18 +120,26 @@ export default {
         console.log(error);
       }
     },
-    //冻结福利(还差在不同页面进行修改时，他会跳转回第一页，因为进行了findAll，还有查看某一个福利的时候也是)
+    //冻结福利
     async toBlocking(val){
-      // console.log(val);
       let temp = {...val};
-      // console.log(temp.status);
       temp.status = "被冻结";
       this.currentWelfare = temp;
       try {
         let res = await saveOrUpdateWelfare(this.currentWelfare);
         if(res.status === 200){
+                // -------------------------------------------
+                if(this.welfareData != this.welfareDataBackup){
+                  let res = await findAllWelfare();
+                  let result = res.data.filter(item => {
+                    return item.name === val.name;
+                  });
+                  this.welfareData = result;
+                }else{
+                  this.findWelfare();
+                }
+                // -------------------------------------------
                 config.successMsg(this,'冻结成功');
-                this.findWelfare();
               }else{
                 config.errorMsg(this,'冻结失败');
               }
@@ -140,7 +148,7 @@ export default {
         console.log(error);
       }
     },
-    //恢复福利使用(同上)
+    //恢复福利使用
     async toRegain(val){
       // console.log(val);
       let temp = {...val};
@@ -150,8 +158,16 @@ export default {
       try {
         let res = await saveOrUpdateWelfare(this.currentWelfare);
         if(res.status === 200){
+                if(this.welfareData != this.welfareDataBackup){
+                  let res = await findAllWelfare();
+                  let result = res.data.filter(item => {
+                    return item.name === val.name;
+                  });
+                  this.welfareData = result;
+                }else{
+                  this.findWelfare();
+                }
                 config.successMsg(this,'恢复成功');
-                this.findWelfare();
               }else{
                 config.errorMsg(this,'恢复失败');
               }
@@ -160,8 +176,10 @@ export default {
         console.log(error);
       }
     },
-    //福利名称改变(success)
+    //福利名称改变
     welfareChange(val){
+      //页面回到首页
+        this.currentPage = 1;
       if(val){
         let result = this.welfareDataBackup.filter(item=>{
           return item.name === val;
@@ -171,15 +189,19 @@ export default {
         this.findWelfare();
       }
     },
-    //获取复选框选中的(success)
+    //获取复选框选中的
     changeWelfare(val){
       //获取到选中的所有数据数组
       let ids = val.map(item => {
         return item.id;
       })
       this.ids = ids;
+      let names = val.map(item => {
+        return item.name;
+      })
+      this.names = names;
     },
-    //批量删除(success)
+    //批量删除
     toBatchDelete(){
       //获取要删除的id
       let ids = this.ids;
@@ -198,7 +220,7 @@ export default {
                   result.push(500);
                 }
               });
-              setTimeout(()=>{
+              setTimeout(async ()=>{
                 //判断result的值是否都是200，如果不是则返回失败。
                 let resu = result.every(item=>{
                   return item===200;
@@ -209,7 +231,18 @@ export default {
                   config.errorMsg(this,"批量删除失败");
                 }
                 //数据已经删除所以要重新更新
-                this.findWelfare();
+                // this.findWelfare();
+                // -------------------------------------------
+                if(this.welfareData != this.welfareDataBackup){
+                  let res = await findAllWelfare();
+                  let result = res.data.filter(item => {
+                    return item.name === this.names[0];
+                  })
+                  this.welfareData = result;
+                }else{
+                  this.findWelfare();
+                }
+                // -------------------------------------------
               },2000);
             }
           }
@@ -221,12 +254,12 @@ export default {
         });
       }
     },
-    //页面改变(success)
+    //页面改变
     pageChange(page){
       // console.log(page,'!!!!!!!!!!');
       this.currentPage = page;
       // 让当前页发生改变
-    }
+    },
 
   },
   created() {
@@ -235,7 +268,11 @@ export default {
   mounted() {}
 };
 </script>
+
 <style lang="scss" scoped>
+  .searchDiv{
+    margin-bottom: 10px;
+  }
   .footerDiv{
     overflow: hidden;
     margin-top: 10px;

@@ -3,13 +3,13 @@
  * 商家列表页面
  * @Date: 2019-12-23 17:11:53 
  * @Last Modified by: Mo
- * @Last Modified time: 2019-12-27 17:13:52
+ * @Last Modified time: 2019-12-28 21:52:37
  */
 <template>
 <!-- 选择框 -->
   <div>   
     <div class='searchDiv'>
-        <el-select v-model="province" clearable placeholder="省份" @change="provinceChange">
+         <el-select v-model="province" clearable placeholder="省份" @change="provinceChange"> <!--//不改变不触发事件  //不需要再传参，已经有‘当前选中的option‘值 -->
             <el-option
               v-for="item in provinceData"
               :key="item.id"
@@ -79,15 +79,15 @@
   <!-- 批量删除按钮 -->
  <div class="footDiv">
       <div class='btnDiv'><el-button type="danger" size="mini" @click="toBatchDelect" >批量删除</el-button></div>
-      <div class="pageDiv">
+       <div class="pageDiv">    <!--没有加sync 表示只读一次，单向数据绑定 -->
         <el-pagination 
         :page-size="pageSize"
-        :current-page.sync="currentPage"
-         @current-page="pageChange"
+        :current-page.sync="currentPage"  
+         @current-change="pageChange"  
           background
           layout="prev, pager, next"
-          :total="businessData.length">
-        </el-pagination>
+           :total="businessData.length"> <!--//分页总条数 --> <!-- @current-change当前页面改变时触发的事件处理程序 -->
+        </el-pagination>                      <!--  current-page属性支持sync 只要改了current-page的值，就会发生变化    -->
 </div>
  </div>
 
@@ -211,7 +211,7 @@ export default {
       businessData:[],  //商家数据
       dialogFormVisible:false,
       currentPage:1,  //当前页
-      pageSize:config.pageSize,
+      pageSize:config.pageSize,   //单项绑定config的每页条数
       FormVisible:false,
       busMsg:[],
       ids:[], //批量删除的ID
@@ -379,7 +379,7 @@ export default {
      
        
        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
+          confirmButtonText: '删除',
           cancelButtonText: '取消',
           type: 'warning'
         })
@@ -463,6 +463,7 @@ export default {
           try{
             let res=await findBusinessByProvince({province:val});
             this.businessData=res.data;
+            this.currentPage=1;  //对分页进行重置
           }catch(err){
             config.errorMsg(this,'查找错误');}
           }
@@ -478,6 +479,7 @@ export default {
           try{
             let res=await findBusinessByCity({city:val});
             this.businessData=res.data;
+            this.currentPage=1;
           }catch(err){
             config.errorMsg(this,'查找错误');}
           }
@@ -492,6 +494,7 @@ export default {
           try{
             let res=await findBusinessByIndustry({industry:val});
             this.businessData=res.data;
+            this.currentPage=1;
           }catch(err){
             config.errorMsg(this,'查找错误');}
           }
@@ -508,6 +511,7 @@ export default {
           try{
             let res=await findBusinessByScale({scale:val});
             this.businessData=res.data;
+            this.currentPage=1;
           }catch(err){
             config.errorMsg(this,'查找错误');}
           }
@@ -515,7 +519,7 @@ export default {
     },
 
 //页数发生改变
-  pageChange(page){
+  pageChange(page){   //page当前页数     //数据模型改 依赖条件改 计算属性改
     this.currentPage=page;
   }
 
@@ -530,7 +534,7 @@ export default {
   mounted() {}
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" scoped>  //scss可写嵌套代码
 .drop{
   border-radius: 30px;
 

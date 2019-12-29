@@ -165,17 +165,14 @@
 <!-- **********************************************  详情框**************** -->
  <el-dialog :title="busMsg.name" :visible.sync="FormVisible" class="dialogShow">
   <el-card >
-    <div class="seeDiv" >      
-     <span>行业：</span> {{busMsg.industry}}
-      <br>     
-      <span>规模：</span> {{busMsg.scale}}     
-    </div>
-    <div class="seeDiv">
-      <span>注册时间</span>：{{busMsg.establishedTime}}
-      <br>
-      <span>注册资本：</span>{{busMsg.registeredCapital}}
-    </div>
-   
+    <el-row class="seeDiv">
+      <el-col :span="6"><div class="grid-content bg-purple-dark"><span>行业：</span> {{busMsg.industry}}</div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple-dark"><span>规模：</span> {{busMsg.scale}}</div></el-col>
+    </el-row>
+    <el-row class="seeDiv">
+      <el-col :span="6"><div class="grid-content bg-purple-dark"><span>注册时间</span>：{{busMsg.establishedTime}}</div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple-dark"><span>注册资本：</span>{{busMsg.registeredCapital}}</div></el-col>
+    </el-row>
     <div class="descDiv">
       &nbsp;&nbsp;&nbsp;&nbsp;{{busMsg.description}}
     </div>
@@ -548,18 +545,20 @@ export default {
 }
 .seeDiv{
   border-bottom:1px solid #ccc;
+  margin-bottom: 10px;
   line-height: 30px;
   span{
     color: #999;
   }
+  img{
+    margin: 0 236px;
+  }
 }
 .descDiv{
+  height: 60px;
   color: #999;
   font-size:15px ;
   border-bottom:1px solid #ccc;
-}
-.dialogShow{
-
 }
 
 </style>

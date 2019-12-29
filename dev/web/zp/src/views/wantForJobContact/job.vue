@@ -1,8 +1,13 @@
 /*
  * @Author: Wuwangzai 
  * @Date: 2019-12-28 15:12:59 
+<<<<<<< HEAD
  * @Last Modified by: wangzai
  * @Last Modified time: 2019-12-29 17:16:44
+=======
+ * @Last Modified by: wenxt
+ * @Last Modified time: 2019-12-29 15:30:55
+>>>>>>> 23537749e1108f807ad937614571793ed34ebfa4
  */
 
 <template>

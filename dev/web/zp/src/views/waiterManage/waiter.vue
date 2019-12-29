@@ -2,13 +2,8 @@
  * @Author: liuyr 
  * 客服列表页面
  * @Date: 2019-12-23 17:11:53 
-<<<<<<< HEAD
  * @Last Modified by: wangzai
  * @Last Modified time: 2019-12-29 17:01:19
-=======
- * @Last Modified by: wenxt
- * @Last Modified time: 2019-12-29 15:30:57
->>>>>>> 23537749e1108f807ad937614571793ed34ebfa4
  */
 <template>
 
@@ -250,10 +245,7 @@ import {deleteCustomerServiceById,
         findBusinesByGender,
         saveOrUpdateCustomerService,
         findCustomerServiceById}  from "@/api/service.js"
-<<<<<<< HEAD
         
-=======
->>>>>>> 23537749e1108f807ad937614571793ed34ebfa4
 import {findAllEmploymentJobhunterWithJobhAndEmpl} from '@/api/employmentJobhunter.js'        
 import config from '@/utils/config.js'
 export default {
@@ -377,7 +369,6 @@ export default {
     },
 
 
-<<<<<<< HEAD
 
   async  toAllot(row){
    
@@ -387,10 +378,6 @@ export default {
       console.log( this.CustomerServiceID.i);
      let res = await findAllEmploymentJobhunterWithJobhAndEmpl();
      
-=======
-  async  toEdit(row){
-     let res = await findAllEmploymentJobhunterWithJobhAndEmpl();
->>>>>>> 23537749e1108f807ad937614571793ed34ebfa4
       this.findAllEmpJobData =res.data;
       
       this.timeData();
